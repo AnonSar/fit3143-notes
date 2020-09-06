@@ -1,7 +1,7 @@
 [← Return to Index](https://github.com/cjmlgrto/fit3143-notes/)
 
 # Mutual Exclusion
-* A **critical section** is a section in a program that accesses shared resources
+* A **critical section** is a section in a program that accesses shared resources.
 * A process enters a critical section before accessing the shared resource to ensure that no other process will use the shared resource at the same time
 * Critical sections are protected using flags & monitors in single-processor systems
 * These mechanisms cannot be used in distributed systems
@@ -11,8 +11,8 @@
 * Once process is elected as the “coordinator”
 * When a processes wants to enter a critical section, it sends a request stating which critical section it wants to enter
 * If no other processes is currently in that critical section, the coordinator grants request
-* If a different processes is in the critical section, it is queued
-* When that different process finishes, the process sends a message to the next item on the queue saying that it’s ready to use
+* If a different processes is in the critical section, then the process request the access gets queued .
+* When that different process finishes, the coordinator process sends a message to the next item on the queue saying that the request critical section is ready to use.
 
 ### Pros
 * Fair since first-come-first-serve
@@ -25,12 +25,12 @@
 * A single coordinator may become a performance bottleneck
 
 ## Distributed Algorithm
-* Requires ordering of all events in the system — Lamport’s algorithm is used (“Happens-before” relation)
-* When a process wants to enter a critical section, the process sends a request message to all other processes:
+* Requires ordering of all events in the system — Lamport’s algorithm is used for this purpose (“Happens-before” relation)
+* When a process wants to enter a critical section, the process sends a request message to all other processes and that request message contains the following:
 	* Name of critical section
 	* Process number
 	* Current time
-* The other processes receive the request message
+* The other processes that receive the request message
 	* If the process is not in the requested critical section and also has not sent a request message for the same critical section, return OK to the requesting process
 	* If the process is in the critical section, it does not return any response and puts the request to the end of a queue
 	* If the process has also sent out a request for the same section, it compare the timestamp of the sent request message and the received message
@@ -48,14 +48,14 @@
 ### Cons
 * 2(n-1) messages are required to enter a critical section, where n is the number of processes
 * If one of the processes fails, the process does not respond to the request — it means no process can enter the critical section
-* The coordinator is the bottleneck in a centralised system — since call processes send requests to all other processes in this distributed algorithm, all processes are bottlenecks
+* The coordinator is the bottleneck in a centralised system — since call processes send requests to all other processes in this distributed algorithm, here all processes are bottlenecks
 
 ## Token Ring Algorithm
 * Arrange the processes in a virtual ring (even if they are not topologically arranged as such)
 * Process zero receives a token
 * The token is passed to the process with the next sequence number (i.e. process 1 → 2 → 3 → …)
 * A process with the token can enter the critical section, then passes it when it is done
-* The token is simply passed if the process does not need to enter the critical section
+* The token is simply passed by a process if that process does not need to enter the critical section
 
 ### Pros
 * Processes don’t suffer from starvation — before entering a critical section, a process waits at most for the duration that all other processes enter and exit the critical section
@@ -66,7 +66,7 @@
 * The ring must be reconstructed when a process crashes
 
 ## Mutual Exclusion Algorithms, Compared
-### Messages Exchanged
+### Messages Exchanged betwen different algorithms discussed above
 * Centralised: 3
 * Distributed: 2(n-1)
 * Ring: 2
