@@ -34,7 +34,7 @@
 	- A drift of 1% means the lock adds or loses a second every 100 seconds
 
 ### Cristian’s Algorithm
-- Synchronises all other machines to the clock of one machine, the _time server_
+- Synchronises all other machines to the clock of one machine, the _time server_ and the time of that one machine can be adjusted to the real time.
 - Every machine requests the current time to the time server
 - The time server responds to the request as soon as possible
 - The requesting machine sets its clock to: `server_time + (post_request_time - pre-_request_time - server_elapsed)/2`
@@ -50,21 +50,30 @@
 	6. This avoid further uncertainty due to round-trip-time at the slave processes
 	7. Everyone adjusts their time
 - With this method, the average cancels out individual clock’s tendencies to drift
-- Computer systems avoid rewinding their clock when they receive a negative clock alteration — doing so would break the property of monotonic time, which is a fundamental assumption
+- Computer systems avoid rewinding their clock when they receive a negative clock alteration — doing so would break the property of monotonic time (which means that time must either stay the same or it should be moving forward), which is a fundamental assumption
 - A simple solution is to halt the clock for the duration (but this simplistic solution can cause problems)
-- Another solution is to slow the clock
+- Another solution is to slow the clock called _skew clock_
 
 ### Averaging Algorithm
-- Unlike the algorithms above, the averaging algorithm is **decentralised** (i.e. no master)
+- Unlike the algorithms above, the averaging algorithm is **decentralised** (i.e. no master) and hence there is no single point of failure in this algorithm like the above algorithms.
 - This algorithm divides time into resynchronisation intervals with a fixed length R
 - Every machine broadcasts the current time at the beginning of each interval according to its clock
-- A machine collects all other broadcasts for a certain interval and sets the local clock by the average of their arrival times
+- A machine collects all other broadcasts for a certain interval and sets its own local clock by the average of their arrival times that it received from the other systems.
 
 ### Lamport’s Synchronisation Algorithm
 
+Leslie Lamport shoed that clock synchronisation need not to be absolute. If two processes do not interact, then they do not need synchronised clocks since all the matters is that they agree on the order in which events occur.
+
 #### Logical and Physical Clocks
+
+_**Physical Clock**_
+
+- Physical clock agree on time within a certain time limit, the first three algorithm here attempts to synchronise physical clocks.
+
+_**Logical Clock**_
+
 - Clock sync need not be absolute
-- If to processes do not interact, their clock need not be synchronised
+- If two processes do not interact, their clock need not be synchronised
 - What matters is they agree on the order in which events occur
 - For many purposes, it is sufficient that all interacting machines agree on the same time
 - It is not essential that time is the real time
@@ -88,13 +97,13 @@
 - The root of the problem is that clocks advance independently or via messages, but there is no history as to where this advance comes from
 
 ### Vector Clock
-- Each process maintains a vector clock V of side N, where N is the number of processes
+- Each process maintains a vector clock V of size N, where N is the number of processes
 - The component Vi[j] contains the process Pi’s knowledge about Pj’s clock
 - Initially, we have Vi[j] := 0 for i, j << {1, 2, …, N}
 - Clocks are advanced as follows:
-	1. Before Pi timestamps an event, it executes Vi[i] Vi[i] + 1
+	1. Before Pi timestamps an event, it executes Vi[i] = Vi[i] + 1 (it increments its timestamp for itself)
 	2. Whenever a message m is sent from Pi to Pj:
 		- Process Pi executes Vi[i] := Vi[i] + 1 and sends Vi with m
 		- Process Pj receive Vi with m and merges the vector clocks Vi and Vj as follows:
 		- Vj[k] := { max(Vj[k], Vi[k])+1 if j=k, Max(Vj[k], Vi[k] otherwise }
-- This last part ensures that everything subsequently happens at Pj is now causally related to everything that previously happened at Pi
+- This last part ensures that everything that subsequently happens at Pj is now causally related to everything that previously happened at Pi. This addresses the shortcoming of the Lamport's Baking Algorithm as it can be used to establish whether a casual relationship exists or not.
