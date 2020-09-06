@@ -17,7 +17,7 @@
 	* **Resource Nodes**
 	* **Assignment Edges**
 	* **Request Edges**
-* In a resource allocation graph, a _cycle_ is a necessary condition for a deadlock to exist
+* In a resource allocation graph, a _cycle_ is a necessary condition for a deadlock to exist.
 * If there is only one copy of all resource: can result in a cycle
 * If there are multiple copies of some resources: can result in a knot
 * A **knot** in a directed graph is a collection of nodes and edges with the property that _every vertex in the knot has outgoing edges, and all outgoing edges from vertices in the knot terminate at other vertices in the knot_ (i.e. when all the vertices are connected by outgoing edges)
@@ -47,7 +47,7 @@
 	* List of arc adds/deletes can be sent periodically
 * A “false deadlock” can occur if messages sent to the coordinator arrive in the wrong order
 	* Global time ordering must be imposed on all machines
-	* Or coordinator can reliably ask each machine whether it has any release messages
+	* Or coordinator can reliably ask each machine whether it has any release messages before making any deadlock claim.
 
 ### A Distributed Approach (Chandy-Misra-Haas Algorithm)
 * Processes can request multiple resources at once
