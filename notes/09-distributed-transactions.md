@@ -27,13 +27,14 @@ An **atomic transaction** gives a view that either a set of operations is all co
 	* If checksum error is encountered because of a bad block, the block is fixed by copying from the disk without an error
 
 ## Transaction Primitives
-* Programming a transaction requires special primitives that must be supplied by the OS or by the programming language — either as system calls, library functions etc.
+* Programming a transaction requires _special primitives_ that must be supplied by the OS or by the programming language — either as system calls, library functions etc.
 * Examples of primitives are
 	* **Begin transaction**
 	* **End transaction**
 	* **Abort transaction**
 	* **Read**
 	* **Write**
+* **Begin Transaction** and  **End Transaction** are the two primitives that specify the scope of the transaction and all the primitives between these primitivies form the transaction.
 	
 ## Properties of Transactions
 ### Atomic
@@ -53,11 +54,11 @@ An **atomic transaction** gives a view that either a set of operations is all co
 * No failure _after the commit_ can undo the results or cause these to be lost
 
 ## Nested Transactions
-* **Nested transactions** are just sub-transactions of a transaction
+* **Nested transactions** are just sub-transactions of a transaction (a transaction containing other transactions)
 * A problem of nested transactions is that if the parent is aborted, the entire system needs to undo changes — but if the changes in the sub-transactions have already been committed, they need to be undone — but _undoing a commit is a violation_
-* Characterstics
+* To alleviate the above problem, we define the characterstics of a nested transaction:
 	* Permanence of a sub-transaction is only valid in the world of its direct parent and is invalid in the world of further ancestors
-	* Permanence of the results is only valid for the outermost transaction
+	* Permanence of the results is only valid for the outermost transaction (that is, the top level transaction that is itself not nested in another transaction)
 
 ### Addressing Transaction Violation
 * Create a private copy of all objects in the system for each sub-transaction
@@ -73,16 +74,17 @@ An **atomic transaction** gives a view that either a set of operations is all co
 	* Write-ahead log
 
 ### Private Workspace
-* When a process starts a transaction, it is given a **private workspace** containing all the objects including data and files
-* I/O operations are performed here
+* When a process starts a transaction, it is given a **private workspace** containing all the objects (including data and files) of the system.
 * The data within the workspace is written back when the transaction commits
-* Problem: cost of copying every object is high
+* Problem: cost of copying every object in the private workspace is high
 * Solution: 
-	* do not copy reads, only copy objects that are to be updated
-	* Use indices to objects
-	* When an object needs to be updated, a copy of the index and the objects are made in
+	* if a process only reads the objects, then there's no need for the private copy of those objects.
+	* if a process needs to update an object, then only copy that particular object in the private workspace of the process.
+	* Use indices to objects in order to reduce the number of copy operations
+	* When an object needs to be updated, a copy of it's index and the objects are made in the private workspace
 	* The private index is updated
 	* On commit, the private index is copied to the parent’s index (i.e. replacing pointers)
+	* If the transaction is aborted, then the object in the private workspace and it's private index in the workspace, both of them are discarded.
 
 ### Write-ahead Log
 * Before any changes are made, a record (log) is written to a **write-ahead log** on stable storage
@@ -103,15 +105,15 @@ An **atomic transaction** gives a view that either a set of operations is all co
 ### Process
 * One process acts as the coordinator
 * The other participating processes are subordinates (“cohorts”)
-* The coordinator writes an entry “prepare” in the log on a stable storage and sends the other processes involved (the subordinates) a message telling them to prepare
+* The coordinator writes an **entry “prepare”** in the log on a stable storage and sends the other processes involved (the subordinates) a message telling them to prepare
 * When a subordinate receives the message, it checks to see if it is ready to commit, makes a log entry, and sends back its decision
 * After collecting all the responses, if all the processes are ready to commit, the transaction is committed (otherwise, aborted)
 * The coordinator writes a log entry and sends a message to each subordinate informing it of the decision
 * The coordinator’s writing commit log actually means committing the transaction and no rolling back occurs no matter what happens afterward
 
 ### Properties
-* The protocol is highly resilient in the face of crashes because it uses stable storage
-* If the coordinator crashes after a “prepare” or a “commit” log entry, it can still continue from sending a “prepare” or “commit” message
+* The protocol is **highly resilient** in the face of crashes because it uses stable storage
+* If the coordinator crashes after a “prepare” or a “commit” log entry, it can still continue from sending a “prepare” or “commit” message upon restart
 * If a subordinate crashes after writing a “ready” or “commit” log entry, it can still continue from sending a “ready” or “finished” message upon restart
 
 ## Three Phase Commit Protocol
