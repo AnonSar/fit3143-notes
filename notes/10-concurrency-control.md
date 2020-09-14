@@ -86,7 +86,7 @@
 ## Optimistic
 * Run the transactions, be optimistic about transaction conflicts
 * At the end of a transaction (i.e. when it is committing) we check for the existence of conflict — if no conflict is detected, the local copies are written on the real resource — otherwise, aborted
-* Progression is done in phases
+* Progression of a trqnsaction is done in phases:
 	1. Read & private write
 	2. Validate
 	3. Write
@@ -97,7 +97,7 @@
 * Each transaction Ti is assigned a timestamp TS(Ti) at the beginning of the validation phase
 
 ### Validation Conditions
-* For every pair of transactions Ti, Tj, such that TS(Ti) < TS(Tj), one of the following conditions must hold:
+* In order to check for conflict between two transactions, every pair of transactions Ti, Tj, such that TS(Ti) < TS(Tj), one of the following validation conditions must hold:
 	* Ti completes (all three phases) before Tj begins
 	* Ti completes before Tj starts its write phase, and Ti does not write any object read by Tj
 	* Ti completes the read phase before Tj completes its Read phase and Ti does not write any object that is either read or written by Tj
