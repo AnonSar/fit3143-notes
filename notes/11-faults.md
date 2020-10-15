@@ -65,6 +65,9 @@
 * Yup
 
 ## Fault-Tolerant Systems
+
+We designate a system that does not tolerate failures as a fault-tolerant system. In such system the occurence of a fault violates _liveness_ and _safety_  properties.
+
 * **Safety** properties specify that “something bad never happens”
 * **Liveness** properties assert that “something good will eventually happen”
 
@@ -74,7 +77,7 @@
 * In a Masking Tolerance system, when fault F is masked, its occurrence has no impact on the application (that is, P = Q)
 * Masking tolerance is important in many safety-critical applications where the failure can endanger human life or cause massive loss (i.e. an aircraft must be able to fly even if one of its engines fail)
 * Masking tolerance preserve both _safety_ and _liveness_ properties of the original system
-* Implementing failure masking — through information, time and physical redundancy 
+* Implementing failure masking — through information redundancy, time redundancy and physical redundancy 
 
 ### Non-Masking Tolerance
 * Fault temporarily affect and violate the *safety* property (i.e P ⊂ Q)
@@ -88,7 +91,7 @@
 * A fail-safe system relaxes the tolerance requirement by avoiding only those faulty configurations that will have catastrophic consequences (not withstanding the failure)
 * e.g. at a 4-way traffic crossing, if the lights are green in both directions, then a collision is possible, however if the lights are red, at best traffic will stall but will not have any catastrophic side effect
 
-### Graceful Degradation
+### Graceful Degradation (Performance Degradation)
 * Systems that neither mask nor fully recover from the effect of failures
 * But exhibits a degraded behaviour that is still considered near-normal & near-acceptable
 * The notion of acceptability is highly subjective and entirely dependent on the user
