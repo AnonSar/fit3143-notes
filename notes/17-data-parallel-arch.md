@@ -13,32 +13,31 @@
 How do we access data in different processors?
 
 ### Nearest Neighbours 
-* Mapping spatially coherent data into SIMD systems
+* Mapping **_spatially coherent data_** into SIMD systems
 	* Spatially correlated, like images
-* Common to connect NSEW, but diagonal has also been implemented
-	* Applied to massively parallel systems
+* Common to connect NSEW (cardinal directions), but diagonal has also been implemented
+* This technique is usually applied to massively parallel systems and it happens to be:
 	* Scalable
 	* Simple to implement
 
 ### Trees and Graphs
 * Problems expressed as graphs
 	* e.g. database searching, model machines
-* No mathematically regular structure
+* No mathematically regular structure due to which architecture requires reconfigurability
 * Binary and quad trees common
-* Communication bottlenecks going through roots of subtrees
+* Communication bottlenecks can occur going through roots of subtrees
 
 ### Pyramid
-* Combination of mesh and tree
+* This structure is a combination of mesh and tree:
 	* Supports nearest neighbour plus tree communication
-	* Local communication of mesh
+	* Local communication  mesh
 	* Global communication of tree
-* Useful for data stored at multiple resolutions
-	* Like images
+* Useful for data stored at multiple resolutions like images
 
 ### Hypercube
-* 2^N processors — each of which has N links
+* 2^N processors where each processor has N links
 * Fault tolerant
-* Shorter pathways than mesh
+* Shorter pathways than mesh management
 
 ## Different Data Parallel Architectures
 * SIMD — program pipelined into multiple processors then back
