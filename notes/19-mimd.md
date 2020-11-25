@@ -1,43 +1,43 @@
 [← Return to Index](https://github.com/cjmlgrto/fit3143-notes/)
 
+# MIMD (Multiple Instructions Multiple Data)
+
 # MIMD Architectures
 * Distributed Memory MIMD
-	* Replicate processor/memory pairs
-	* Connect them via an interconnection network
+	* Processor/memory pairs are replicated and they are connected via an interconnection network
 * Shared Memory MIMD
-	* Replicate the processors
-	* Replicate the memories
-	* Connect them via an interconnection network
+	* Processors and memories are replicated independently and they happen to be connected via an interconnection network
 
 ## Distributed Memory Machine
-* Access to local memory module is faster than remote
-* Hardware remote access via
+* In distributed memory machine, each processor has its own local memory which is not shared with other processors
+* Access to local memory module is faster than remote memory
+* Hardware access the remote memory via
 	* Load/Store primitive
 	* Message passing layer
-* Cache memory for local memory traffic
-* Message
+* **Cache memory** for local memory traffic
+* Message can be sent from:
 	* Memory to memory
 	* Cache to cache
 
 ### Advantages
-* Local memory traffic less contention than in shared memory
+* **Less contention** in local memory traffic than in shared memory traffic
 * Highly scalable
-* Don’t need sophisticated synchronisation features like monitors, semaphores
+* Don’t need sophisticated **synchronisation features** like monitors, semaphores
 * Message passing serves dual purpose
 	* To send data
 	* Provide synchronisation
 
 ### Disadvantages
-* Load balancing
-* Message passing can lead to sync failures, including deadlock
+* Load balancing is difficult
+* Message passing can lead to **synchronization failures**, including deadlock
 	* Blocking Send → Blocking Receive
 	* Blocking Receive → Blocking Send
-* Intensive data copying of whole structures
-* Small message overheads are high
+* Entire data structure needs to be copied which can be an intensive process
+* The overhead for small messages is high relative to the size of the message.
 
 ## Shared Memory Architecture
-* All processors have equal access to shared memory
-* Local Caches reduce
+* All processors have **equal access** to shared memory
+* **Local Caches** reduce
 	* Memory traffic
 	* Network traffic
 	* Memory access time
@@ -46,48 +46,38 @@
 * No need to partition code or data
 * Occurs on the fly
 * No need to move data explicitly
-* Don’t need new programming languages or compilers
+* Existing programming languages or compilers can be used.
 
 ### Disadvantages
-* Synchronisation is difficult
-* Lack of scalability
-	* IPC becomes bottleneck
+* **Synchronisation of resources** is difficult
+* **Lack of scalability**
+	* IPC (Inter Process Communication) becomes bottleneck
 * Scalability can be addressed by
 	* High throughput, low latency network
-	* Cache Memories
-		* Causes coherence problem
+	* Cache Memories (but this can lead to coherence problem)
 	* Distributed Shared Memory architecture
 
 ## Distributed Shared Memory
-* Non-Uniform Memory Access (NUMA)
-* Cache Coherent Non-Uniform Memory Access (CC-NUMA)
-* Cache-Only Memory Access (COMA)
+* Non-Uniform Memory Access **(NUMA)**
+* Cache Coherent Non-Uniform Memory Access **(CC-NUMA)**
+* Cache-Only Memory Access **(COMA)**
 
 ## Problems of Scalable Computers
-* Tolerate and hide the latency of remote loads
+* Tolerate and hide the latency of **remote loads**
 	* Worse if output of one computation relies on another to complete
 * Tolerate and hide idling due to synchronisation among processors
 
 ### Tolerating Latency
-* Cache memory
-	* Simply lowers the cost of remote access
-	* Introduces cache coherence problem
-* Prefetching
-	* Already present, so cost is low
-	* Increases network load
-* Threads + fast context switching
-	* Accept that it will take a long time and cover the overhead
-* These solutions don’t solve sync issues
-	* Latency-tolerant algorithms can however
+* **Cache Memory**: Involves maintaining the local copy of remote memory which ultimately reduces the cost of remote access. This technique might introduce cache coherence problem
+* **Prefetching**: This technique involves prefetching the data before it is needed. This is already implemented to some extent thus reduces the cost of implementation but it can increase the network load.
+* **Threads + Fast Context Switching**: This technique involves using **local multithreading** in order to minimise the time spent idling.
+**NOTE:** These solutions don’t solve sync issues and in order to solve the sync issues, we must make use of latency-tolerant algorithm.
 
 ## Design Issues of Scalable MIMD
-* Processor Design
-	* Pipelining, parallel instruction issue
-	* Atomic data access, pre-fetching, cache memory, message passing, etc.
-* Interconnection Network Design
-	* Scalable, high bandwidth, low latency
-* Memory Design
-	* Shared memory design
+Scalable MIMD is subject to several design issues:
+* **Processor Design** should consider pipelining and the issues that arise from running instructions in parallel.
+* **Interconnection Network Design** should be designed to be scalable, high bandwidth, low latency.
+* **Memory Design** maybe complex if shared memory design is used.
 	* Cache coherence
 * I/O Subsystem
 	* Parallel IO
