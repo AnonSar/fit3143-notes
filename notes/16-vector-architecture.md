@@ -7,9 +7,13 @@
 
 ## Vector vs Non-Vector Computation
 * Given the task of of adding a random number to each value of an array of size N, a non- vector processor would:
-	* Iterate over each item, modifying each subsequent value one at a time
+	* Iterate over each item, modifying each subsequent value one at a time thus resulting in total time:
+	  Computation Time for N Values = N(t1 + t2 + t3) 
+      (where **t1** is the **pre-computation time**, **t2** is the **per result computation time**, **t3** is the **post computation time**)
 * In contrast, a vector processor could:
-	* Operate on every item in the array at the exact same time
+	* Operate on every item in the array at the exact same time thus resulting in total time:
+	  Computation Time for N Values = t1 + N(t2) + t3
+       (where **t1** is the **pre-computation time**, **t2** is the **per result computation time**, **t3** is the **post computation time**)
 
 ## Pipelined Computation
 * Vector computation can be made much faster through pipelined computation. 
@@ -18,34 +22,34 @@
 * The repetition time is dependent on the time taken to compute the slowest component in a pipelined program.
 
 ## Interleaving
-* Interleaving is a way of improving memory access performance by storing memory in parallel.
+* Interleaving is a way of improving **memory access performance** by storing memory in parallel.
 * Its benefits and characteristics are:
 	* Interleaving can keep feeding a pipelined machine with instructions even if main memory is slow
-	* Interleaving slows down when subsequent accesses are from the same memory bank. However, this is rare when prefetching instructions, since it is sequential Interleaving allows simultaneous memory accesses
-	* Banks are usually selected using some of the low order bits of the address because sequential access will access different banks
-	* Additionally , it is possible to access tow locations at the same time if they reside in the different banks.
-	* However, it is possible for memory contention to occur. To alleviate this, a delay path can be added to the pipelined addres to mitigate this.
+	* Interleaving slows down when subsequent accesses are from the **same memory bank**. However, this is rare when prefetching instructions, since it is sequential.
+	* Banks are usually selected using some of the **low order bits of the address** because then sequential access will access different banks
+	* Additionally , it is possible to access two locations at the same time if they reside in the different banks.
+	* However, it is possible for **memory contention** to occur. To alleviate this, a delay path can be added to the **pipelined addrress** to mitigate this.
 
 ## Vector Startup
-* Vector instructions may be issued at the rate of 1 instruction per clock period — providing there is no contention they will be issued at this rate
-* The first result appears after some delay, and then each word of the vector will arrive at the rate of one word per clock period
+* Vector instructions may be issued at the rate of 1 instruction per clock (IPC) period — providing there is no contention then they will be issued at this rate
+* The first result appears after some delay, and then each word of the vector will arrive at the rate of **one word per clock period**
 * Vectors longer than 64 words are broken into 64 word chunks
 
 ## Stride 
-Stride is the distance separating memory.
+Stride is the distance separating memory bank.
 ### The Effect of Stride on Interleaving
 * Most interleaving schemes simply take the bottom bits of the address and use these to select the memory bank
 * This is very good for sequential address patterns (stride 1) and not too bad for random address patterns
-* But for stride n, where n is the number of memory banks, the performance can be extremely bad. This is due to each access using the same memory bank; this effectively cripples any vectorisation capability, resulting in serialisation and thus a dramatic performance drop.
+* But for stride n, where n is the number of memory banks, the performance can be extremely bad. This is due to each access using the same memory bank; this effectively cripples any **vectorisation capability**, resulting in serialisation and thus a dramatic performance drop.
 
 ### Memory Layout for Stride-free access
 * Consider the layout of an 8x8 matrix
-* Can be placed in memory in two possible ways — by row order or column order
-	* If we know that a particular program requires only row or column order, it is possible to arrange the matrix so that conflict free-access can always be guaranteed
+* Can be placed in memory in two possible ways — by **row order** or **column order**
+	* If we know that a particular program requires only row or column order, it is possible to arrange the matrix so that **conflict free-access** can always be guaranteed
 * Skew the matrix
 	* each row starts in a different memory unit
-	* Possible to access the matrix by row order or column order without memory contention (a condition where two programs try to read the item in the same block of the memory)
-* This requires a different address calculation
+	* Possible to access the matrix by row order or column order without **memory contention** (a condition where two programs try to read the item in the same block of the memory)
+    * This requires a **different address calculation**
 
 ### Address Modification in Hardware
 * Possible to use a different function to compute the module number
@@ -75,11 +79,10 @@ for i = 1 to n
 		a[k,i+1..n] = a[k,i+1..n]-a[k,i]*a[i,i+1..n]
 ```
 
-* The algorithm as expressed accesses both rows and columns
+* The algorithm as expressed accesses both rows and columns. Both the access should be equally efficient
 * The majority of the vector operations have either two vector operands, or a scalar and vector operand, and they produce a vector result
 * The `max` operation on a vector returns the index of the maximum element, not the value
-* The length of the vector items accessed decreases by 1 for each successive iteration
-* Row and Column access should be equally efficient
+* The length of the **vector items** accessed decreases by 1 unit for each successive iteration
 * Vector pipeline should handle a scalar on one input
 * `min`, `max` and `sum` operators required which accept one or more vectors and return scalar
 * Vectors may start large, but get smaller — this may affect code generation due to vector startup cost
