@@ -57,8 +57,8 @@ An **atomic transaction** gives a view that either a set of operations is all co
 * **Nested transactions** are just sub-transactions of a transaction (a transaction containing other transactions)
 * A problem of nested transactions is that if the parent is aborted, the entire system needs to undo changes — but if the changes in the sub-transactions have already been committed, they need to be undone — but _undoing a commit is a violation_
 * To alleviate the above problem, we define the characterstics of a nested transaction:
-	* Permanence of a sub-transaction is only valid in the world of its direct parent and is invalid in the world of further ancestors
-	* Permanence of the results is only valid for the outermost transaction (that is, the top level transaction that is itself not nested in another transaction)
+	* **Permanence of a sub-transaction** is only valid in the world of its direct parent and is invalid in the world of further ancestors
+	* **Permanence of the results** is only valid for the outermost transaction (that is, the top level transaction that is itself not nested in another transaction)
 
 ### Addressing Transaction Violation
 * Create a private copy of all objects in the system for each sub-transaction
@@ -80,7 +80,7 @@ An **atomic transaction** gives a view that either a set of operations is all co
 * Solution: 
 	* if a process only reads the objects, then there's no need for the private copy of those objects.
 	* if a process needs to update an object, then only copy that particular object in the private workspace of the process.
-	* Use indices to objects in order to reduce the number of copy operations
+	* Use **indices to objects** in order to reduce the **number of copy operations**
 	* When an object needs to be updated, a copy of it's index and the objects are made in the private workspace
 	* The private index is updated
 	* On commit, the private index is copied to the parent’s index (i.e. replacing pointers)
@@ -125,5 +125,3 @@ An **atomic transaction** gives a view that either a set of operations is all co
 * Before the commit protocol begins, all the sites are in state q
 * If the coordinator fails while in state q1, all the cohorts perform the timeout transition, thus aborting the transition
 * Upon recovery, the coordinator performs the failure transition
-
-
