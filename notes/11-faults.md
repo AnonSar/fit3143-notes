@@ -2,9 +2,10 @@
 
 # Faults
 ## Dependability
+A dependable system must satisfy the following four properties:
 * **Availability** — system is ready to be used immediately
 * **Reliability** — system can run continuously without failure
-* **Safety** — when a system (temporarily) fails to operate correctly, nothing catastrophic happens
+* **Safety** — when a system (temporarily) fails to operate correctly, nothing **catastrophic** happens
 * **Maintainability** — how easily a failed system can be repaired
 
 ## Total vs Partial Failure
@@ -12,7 +13,7 @@
 * **Partial** — one ore more (but not all) components in a distributed system fail
 
 ## Failure
-* **Failure** — when a system does not meet its promises or cannot provide services in the specified manner
+* **Failure** — when a system does not meet its **promises** or cannot provide services in the specified manner
 * **Error** — part of the system state that leads to failure (i.e. differs from intended value)
 * **Fault** — the cause of an error (results from design errors, manufacturing problems, etc.)
 * Recursive:
@@ -45,7 +46,7 @@
 * Some possible causes of Byzantine failures are:
 	* Total or partial breakdown of a link joining y with one of its neighbors
 	* Software problems in process i
-	* Hardware sync problems
+	* **Hardware Sync Problems**
 		* Assume that every neighbour is connected to the same bus, and reading the same copy sent out by i, but since the clocks are not perfectly synced, they may not read the value of x at the same time — if x varies with time, then different neighbours of i may read different values of x from process i
 
 ### Software Failure
@@ -74,9 +75,9 @@ We designate a system that does not tolerate failures as a fault-tolerant system
 ### Masking Tolerance
 * Let P be the set of configurations for the fault-tolerant system
 * Given a set of fault actions F, the fault span Q corresponds to the largest set of configurations that the system supports
-* In a Masking Tolerance system, when fault F is masked, its occurrence has no impact on the application (that is, P = Q)
+* In a **Masking Tolerance system**, when fault F is masked, its occurrence has no impact on the application (that is, P = Q)
 * Masking tolerance is important in many safety-critical applications where the failure can endanger human life or cause massive loss (i.e. an aircraft must be able to fly even if one of its engines fail)
-* Masking tolerance preserve both _safety_ and _liveness_ properties of the original system
+* Masking tolerance preserve both **_safety_** and **_liveness_** properties of the original system
 * Implementing failure masking — through information redundancy, time redundancy and physical redundancy 
 
 ### Non-Masking Tolerance
@@ -84,11 +85,11 @@ We designate a system that does not tolerate failures as a fault-tolerant system
 * However, *liveness* is not compromised, and eventually normal behaviour is restored (e.g. while streaming a movie, the server crashed, but the system automatically restores service by switching to a backup proxy server)
 * Stabilisation and Checkpointing represent two opposing scenarios in non-masking tolerance
 	* **Checkpointing** relies on history and recovery is achieved by retrieving lost computation
-	* **Stabilisation** is history-insensitive and does not care about lost computation as long as eventual recovery is guaranteed
+	* **Stabilisation** is history-insensitive and does not care about lost computation as long as **eventual recovery** is guaranteed
 
 ### Fail-Safe Tolerance
 * Certain faulty configurations do not affect the application in an adverse way and therefore considered harmless
-* A fail-safe system relaxes the tolerance requirement by avoiding only those faulty configurations that will have catastrophic consequences (not withstanding the failure)
+* A fail-safe system relaxes the **tolerance requirement** by avoiding only those faulty configurations that will have catastrophic consequences (not withstanding the failure)
 * e.g. at a 4-way traffic crossing, if the lights are green in both directions, then a collision is possible, however if the lights are red, at best traffic will stall but will not have any catastrophic side effect
 
 ### Graceful Degradation (Performance Degradation)
