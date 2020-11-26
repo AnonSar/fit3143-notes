@@ -17,10 +17,10 @@
 * If one of the higher-numbered answers, that process becomes the new leader
 * If no one responds, P wins the election and becomes coordinator
 	* Note: timeout overhead, and delayed responses
-* At any moment, a process can get an Election Message from one of its lower-numbered colleagues — the receiver sends an OK back to the sender
+* At any moment, a process can get an Election Message from one of its **lower-numbered colleagues** — the receiver sends an OK back to the sender
 * The receiver then holds an election, until it is already holding one
 * Eventually, all processes give up but one — and that is the new coordinator
-* It announces its victory by sending coordinator messages to all processes
+* It announces its victory by sending **coordinator messages** to all processes
 * If a process that was previously down comes back up, it holds an election
 * If it happens to be the highest-numbered process currently running, it will win the election and take over the coordinator’s job
 * The highest-numbered process always wins, hence the name “bully algorithm”
