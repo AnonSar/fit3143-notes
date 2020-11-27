@@ -23,14 +23,14 @@
 	* **exclusive-exclusive** (write-write conflict)
 
 ### Two Phase Locking
-* Using locks does not guarantee serialisability in the transactions
+* Using locks does not guarantee **serialisability** in the transactions
 * Only transactions executed concurrently as follows will be serialisable
 	1. A transaction locks shared resource before accessing the resource and releasing the lock after using it
 	2. Locking is granted / done according to compatibility constraint
 	3. A transaction does not require any locks after releasing a lock
 * The usage of locks that satisfies above conditions are **Two phase lock protocol**
-* A transaction acquires all necessary lock in the first phase (“growing phase”)
-* The transaction releases all locks in the second phase (“shrinking phase”)
+* A transaction acquires all necessary lock in the first phase **(“growing phase”)**
+* The transaction releases all locks in the second phase **(“shrinking phase”)**
 * Two phase locking is the sufficient condition to guarantee serialisability
 * Suppose a transaction aborts after releasing some of the locks on some shared resouces and after that point, if the other transactions have used resources protected by these released locks, the transactions must also be aborted — **cascading abort**
 
