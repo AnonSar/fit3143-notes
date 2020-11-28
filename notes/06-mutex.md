@@ -46,9 +46,9 @@
 * No deadlock or starvation happens
 
 ### Cons
-* 2(n-1) messages are required to enter a critical section, where n is the number of processes
+* **2(n-1) messages** are required to enter a critical section, where n is the number of processes
 * If one of the processes fails, the process does not respond to the request — it means no process can enter the critical section
-* The coordinator is the bottleneck in a centralised system — since call processes send requests to all other processes in this distributed algorithm, here all processes are bottlenecks
+* The coordinator is the bottleneck in a centralised system — since call processes send requests to all other processes in this distributed algorithm, here **all processes are bottlenecks**
 
 ## Token Ring Algorithm
 * Arrange the processes in a virtual ring (even if they are not topologically arranged as such)
