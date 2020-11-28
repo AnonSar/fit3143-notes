@@ -41,7 +41,7 @@
 
 ### Centralised Deadlock Detection
 * Imitate the non-distributed algorithm through a coordinator
-* Each machine maintains a resource graph for its processes and resources
+* Each machine maintains a **resource graph** for its processes and resources
 * A _central coordinator_ maintains a graph for the entire system
 	* Message can be sent to coordinator each time an arc is added or deleted
 	* List of arc adds/deletes can be sent periodically
@@ -53,7 +53,7 @@
 * Processes can request multiple resources at once
 * Some processes wait for local resources
 * Some processes wait for resources on other machines
-* Algorithm invoked when a process has to wait for a resource
+* Algorithm invoked when a process has to **wait for a resource**
 * A _probe_ message is generated, containing:
 	* Process that just blocked
 	* Process sending the message
