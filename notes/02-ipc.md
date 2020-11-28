@@ -7,7 +7,7 @@
 2. Copy Sharing (Message-Passing)
 
 ## Message-Passing
-* A **message-passing system** is a subsystem of a distributed system that provides a set of message-based IPC protocols
+* A **message-passing system** is a subsystem of a distributed system that provides **a set of message-based IPC protocols**
 * Shields (abstracts) the details of complex network protocols and multiple heterogeneous platforms from programmers
 * Enables processes to communicate by exchanging messages
 * Allows programs to be written by using simple communication primitives such as `send` and `receive`
@@ -63,10 +63,10 @@ Metaphorically, **buffering** means queuing sent/received messages to and from o
 * **Sync systems** can have either a no-buffer or a single-message buffer
 * **Async systems** can have an unbounded capacity buffer or a finite message (also known as a multiple message buffer)
 
-## Multi-datagram Messages
-* There’s a limit to the amount of data that can be transmitted at a time. This is known as MTU (Max Transfer Unit)
-* Messages bigger than the MTU have to be fragmented into several packets/datagrams
-* Thus, messages that need to be sent over multiple packets are called **multi-datagram messages*
+## Multi-Datagram Messages
+* There’s a limit to the amount of data that can be transmitted at a time. This is known as **MTU (Max Transfer Unit)**
+* Messages bigger than the MTU have to be **fragmented** into several packets/datagrams
+* Thus, messages that need to be sent over multiple packets are called **multi-datagram messages**
 * Assembly/disassembly is the responsibility of the message-passing system
 
 ## Encoding and Decoding
@@ -162,7 +162,7 @@ However, if the second function were to occur between a client and a server and 
 
 To fix this problem, we would need to implement **idempotency**. We can do this by:
 
-* Adding a unique **sequence number or ID** with the message
+* Adding a **unique sequence number or ID** with the message
 * Using a **reply cache** to store previous requests and their results (so the server need not process them again)
 
 ## Group Communication (and their issues)
@@ -176,8 +176,8 @@ To fix this problem, we would need to implement **idempotency**. We can do this 
 
 ### Many to Many
 * Issues related as above and many-to-one communications also apply here
-* In addition, ordered message delivery is an important issue (trivial in one-to-many or many-to-one communications)
-* For example, two server processes are maintaining a single salary database — two clients process and send updates for a salary record (what will happen if they reach in a different order? Will sequencing of messages help in this case?)
+* In addition, **ordered message delivery** is an important issue (trivial in one-to-many or many-to-one communications)
+* For example, two server processes are maintaining a single salary database — two clients process send updates for a salary record (what will happen if they reach in a different order? Will sequencing of messages help in this case?)
 
 ### Ordered Delivery for Group Communication
 #### No Ordering
@@ -185,7 +185,7 @@ To fix this problem, we would need to implement **idempotency**. We can do this 
 
 #### Absolute Ordering
 * The order in which messages are sent is the order in which messages are received
-* Using global timestamp as message identifiers with sliding window protocol
+* **Using global timestamp** as message identifiers with sliding window protocol
 
 #### Consistent Ordering
 * All messages are delivered to receivers in the same order
