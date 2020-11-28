@@ -3,12 +3,12 @@
 # Synchronisation
 - A distributed system consists of a collection of distinct processes that are spatially separated and run concurrently
 - In systems with multiple concurrent processes, it is economical to share system resources
-- Sharing may be cooperative or competitive
+- Sharing may be **cooperative** or **competitive**
 - Both competitive and cooperative sharing require adherence to certain rules of behaviour that guarantee correct interaction occurs
 - The rules of enforcing correct interaction are implemented in the form of sync mechanisms
 
 ## Issues Implementing Synchronisation in Distributed Systems
-- In single CPU systems, sync problems such as mutual exclusion can be solved using semaphores (flags) and monitors — which rely on shared memory
+- In single CPU systems, sync problems such as mutual exclusion can be solved using **semaphores** (flags) and **monitors** — which rely on shared memory
 - Flags and monitors cannot be used in distributed systems since different processors are not expected to share memory
 - Even simple matters such as determining one event happening before another requires careful thought
 - In distributed systems, it is usually not possible or desirable to collect all information about the system in once place
@@ -34,7 +34,7 @@
 	- A drift of 1% means the lock adds or loses a second every 100 seconds
 
 ### Cristian’s Algorithm
-- Synchronises all other machines to the clock of one machine, the _time server_ and the time of that one machine can be adjusted to the real time.
+- Synchronises all other machines to the clock of one machine, the **_time server_** and the time of that one machine can be adjusted to the real time.
 - Every machine requests the current time to the time server
 - The time server responds to the request as soon as possible
 - The requesting machine sets its clock to: `server_time + (post_request_time - pre-_request_time - server_elapsed)/2`
@@ -42,7 +42,7 @@
 ### The Berkeley Algorithm
 - A _master_ processes periodically polls the other _slave_ processes
 - Works as follows:
-	1. A master is chosen with a ring-based election algorithm
+	1. A master is chosen with a **ring-based election algorithm**
 	2. The master polls the slaves who reply with their time (similar to Cristian’s algorithm)
 	3. The master observes the round-trip time of the messages and estimates the time of each slave and its own
 	4. The master then averages the clock times, ignoring any values it receives far outside the values of the others
@@ -62,13 +62,14 @@
 
 ### Lamport’s Synchronisation Algorithm
 
-Leslie Lamport shoed that clock synchronisation need not to be absolute. If two processes do not interact, then they do not need synchronised clocks since all the matters is that they agree on the order in which events occur.
+- Leslie Lamport showed that, clock synchronisation need not to be absolute. If two processes do not interact, then they do not need synchronised clocks since all the matters is that they agree on the order in which events occur.
+- Lamport's Synchronisation Algorithm is used to determine the order of events and this can be done by establishing **happens-before** relationship.
 
 #### Logical and Physical Clocks
 
 _**Physical Clock**_
 
-- Physical clock agree on time within a certain time limit, the first three algorithm here attempts to synchronise physical clocks.
+- Physical clock **agree on time** within a **certain time limit**, the first three algorithm here attempts to synchronise physical clocks.
 
 _**Logical Clock**_
 
@@ -82,7 +83,7 @@ _**Logical Clock**_
 
 #### “Happens-Before”
 - “Happens-before” relation:
-	- A → B is read “A happens before B” — this means all processes agree that A occurs before B
+	- A → B is read “A happens before B” — this means all processes agree that A occurs before B
 - The happens-before relation can be observed directly in two situations:
 	- If A and B are events in the same process and A occurs before B, then A → B
 	- If A is the event of a message being sent by one process, and B is the event of the message being received by another processes, then A → B
@@ -94,11 +95,11 @@ _**Logical Clock**_
 
 #### Shortcomings of Lamport’s Clock
 - It observes if A → B then C(A) < C(B) but C(A) < C(B) does not imply A → B always
-- The root of the problem is that clocks advance independently or via messages, but there is no history as to where this advance comes from
+- The root of the problem is that clocks advances **independently** or **via messages**, but there is no history as to where this advance comes from
 
 ### Vector Clock
-- Each process maintains a vector clock V of size N, where N is the number of processes
-- The component Vi[j] contains the process Pi’s knowledge about Pj’s clock
+- Each process maintains a **vector clock V of size N**, where N is the number of processes
+- The **component Vi[j]** contains the process Pi’s knowledge about Pj’s clock
 - Initially, we have Vi[j] := 0 for i, j << {1, 2, …, N}
 - Clocks are advanced as follows:
 	1. Before Pi timestamps an event, it executes Vi[i] = Vi[i] + 1 (it increments its timestamp for itself)
