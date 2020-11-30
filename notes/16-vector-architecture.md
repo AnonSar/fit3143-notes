@@ -1,7 +1,7 @@
 [← Return to Index](https://github.com/cjmlgrto/fit3143-notes/)
 
 # Vector Architectures
-* **Vector Processors** are special-purpose computers that can process large sets (arrays) of data in parallel
+* **Vector Processors** are special-purpose computers that can process **large sets (arrays) of data** in parallel
 * The basic idea in a vector processor is to combine two vectors and produce an output vector. If A, B and C are vectors of N elements, a vector processor can perform the operation C = A + B where C(i) = B(i) + A(i) where <= i <= N -1
 * The memory subsystem for a vector processor needs to be able to support 2 reads per cycle and 1 write per cycle.
 
@@ -17,7 +17,7 @@
 
 ## Pipelined Computation
 * Vector computation can be made much faster through pipelined computation. 
-* Pipelined computation cascades operations of a program which results in a smaller gap of time between computing a result needed by other parts of a parallel program.
+* Pipelined computation cascades operations of a program which results in a smaller gap of time between computing a result needed by **other parts of a parallel program**.
 * The slowest computational component in a pipelined program increases the time to first result, which in turn increases the time it takes to iterate over the steps of a program.
 * The repetition time is dependent on the time taken to compute the slowest component in a pipelined program.
 
@@ -25,30 +25,30 @@
 * Interleaving is a way of improving **memory access performance** by storing memory in parallel.
 * Its benefits and characteristics are:
 	* Interleaving can keep feeding a pipelined machine with instructions even if main memory is slow
-	* Interleaving slows down when subsequent accesses are from the **same memory bank**. However, this is rare when prefetching instructions, since it is sequential.
-	* Banks are usually selected using some of the **low order bits of the address** because then sequential access will access different banks
+	* Interleaving slows down when **subsequent accesses** are from the **same memory bank**. However, this is rare when prefetching instructions, since it is sequential.
+	* Banks are usually selected using some of the **low order bits of the address** because then the access to different banks will be sequential.
 	* Additionally , it is possible to access two locations at the same time if they reside in the different banks.
-	* However, it is possible for **memory contention** to occur. To alleviate this, a delay path can be added to the **pipelined addrress** to mitigate this.
+	* However, it is possible for **memory contention** to occur. To alleviate this, a **delay path** can be added to the **pipelined addrress** to mitigate this.
 
 ## Vector Startup
-* Vector instructions may be issued at the rate of 1 instruction per clock (IPC) period — providing there is no contention then they will be issued at this rate
-* The first result appears after some delay, and then each word of the vector will arrive at the rate of **one word per clock period**
-* Vectors longer than 64 words are broken into 64 word chunks
+* Vector instructions may be issued at the rate of **1 instruction per clock (IPC)** period — providing there is no contention then they will be issued at this rate
+* The first result appears after some delay, and then each word of the vector will arrive at the rate of **one word per clock period (WPC)**
+* Vectors longer than **64 words** are broken into **64 word chunks**
 
 ## Stride 
-Stride is the distance separating memory bank.
+Stride is the **distance** separating memory bank.
 ### The Effect of Stride on Interleaving
-* Most interleaving schemes simply take the bottom bits of the address and use these to select the memory bank
-* This is very good for sequential address patterns (stride 1) and not too bad for random address patterns
-* But for stride n, where n is the number of memory banks, the performance can be extremely bad. This is due to each access using the same memory bank; this effectively cripples any **vectorisation capability**, resulting in serialisation and thus a dramatic performance drop.
+* Most **interleaving schemes** simply take the bottom bits of the address and use these to select the memory bank
+* This is very good for sequential address patterns (stride 1) and not too bad for **random address patterns**
+* But for stride n, where n is the number of memory banks, the performance can be extremely bad. This is due to each access using the **same memory bank**; this effectively cripples any **vectorisation capability**, resulting in serialisation and thus a dramatic performance drop.
 
 ### Memory Layout for Stride-free access
 * Consider the layout of an 8x8 matrix
 * Can be placed in memory in two possible ways — by **row order** or **column order**
 	* If we know that a particular program requires only row or column order, it is possible to arrange the matrix so that **conflict free-access** can always be guaranteed
 * Skew the matrix
-	* each row starts in a different memory unit
-	* Possible to access the matrix by row order or column order without **memory contention** (a condition where two programs try to read the item in the same block of the memory)
+	* each row starts in a **different memory unit**
+	* Possible to access the matrix by **row order** or **column order** without **memory contention** (a condition where two programs try to read the item in the same block of the memory)
     * This requires a **different address calculation**
 
 ### Address Modification in Hardware
@@ -80,24 +80,24 @@ for i = 1 to n
 ```
 
 * The algorithm as expressed accesses both rows and columns. Both the access should be equally efficient
-* The majority of the vector operations have either two vector operands, or a scalar and vector operand, and they produce a vector result
+* The majority of the vector operations have either **two vector operands**, or a **scalar and vector operand**, and they produce a vector result
 * The `max` operation on a vector returns the index of the maximum element, not the value
-* The length of the **vector items** accessed decreases by 1 unit for each successive iteration
+* The length of the **vector items** accessed decreases by **1 unit** for each successive iteration
 * Vector pipeline should handle a scalar on one input
 * `min`, `max` and `sum` operators required which accept one or more vectors and return scalar
 * Vectors may start large, but get smaller — this may affect code generation due to vector startup cost
 
 ### Sparse Matrices
-* In many engineering computations, there may be very large matrices
+* In many **engineering computations**, there may be very large matrices
 	* May also be sparsely occupied
 	* Contain many zero elements
 * Problems with normal method of storing the matrix:
 	* Occupy far too much memory
 	* Very slow to process
-* Many packages solve the problem by using a software data representation
+* Many packages solve the problem by using a **software data representation**
 	* The trick is not to store the elements which have zero values
 * At least two sorts of access mechanism
-	* Random
-	* Row/Column sequential
-* Matrix multiplication then consists of moving down the row/column pointers and multiplying elements if they have the same index values
+	* **Random**
+	* **Row/Column sequential**
+* Matrix multiplication then consists of moving down the **row/column pointers** and multiplying elements if they have the same index values
 * Hard to implement this type of data representation
